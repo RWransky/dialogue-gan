@@ -5,7 +5,7 @@ class disc_config(object):
     batch_size = 256
     lr = 0.2
     lr_decay = 0.9
-    vocab_size = 25000
+    vocab_size = 350
     embed_dim = 512
     steps_per_checkpoint = 200
     #hidden_neural_size = 128

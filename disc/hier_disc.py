@@ -4,6 +4,7 @@ import os
 import time
 import datetime
 import random
+from six.moves import xrange  # pylint: disable=redefined-builtin
 from .hier_rnn_model import Hier_rnn_model
 import utils.data_utils as data_utils
 
@@ -69,7 +70,7 @@ def hier_get_batch(config, max_set, query_set, answer_set, gen_set):
     train_query = []
     train_answer = []
     train_labels = []
-    half_size = batch_size / 2
+    half_size = int(batch_size / 2)
     for _ in range(half_size):
         index = random.randint(0, max_set)
         train_query.append(query_set[index])

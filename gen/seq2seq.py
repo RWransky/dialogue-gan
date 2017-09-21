@@ -16,12 +16,12 @@ from tensorflow.python.ops import math_ops
 from tensorflow.python.ops import nn_ops
 from tensorflow.python.ops import rnn
 from tensorflow.python.ops import rnn_cell
-from tensorflow.contrib.rnn.python.ops import core_rnn_cell_impl
+from tensorflow.contrib.rnn.python.ops import core_rnn_cell
 from tensorflow.python.ops import variable_scope
 from tensorflow.python.util import nest
 
 
-linear = core_rnn_cell_impl._linear  # pylint: disable=protected-access
+linear = core_rnn_cell._linear  # pylint: disable=protected-access
 
 
 def _argmax_or_mcsearch(embedding, output_projection=None, update_embedding=True, mc_search=False):

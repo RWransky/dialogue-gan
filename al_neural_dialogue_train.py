@@ -4,6 +4,7 @@ import tensorflow as tf
 import numpy as np
 import sys
 import time
+from six.moves import xrange  # pylint: disable=redefined-builtin
 import gen.generator as gens
 import disc.hier_disc as h_disc
 import random
@@ -177,7 +178,7 @@ def al_train():
                 print("train_answer: ", len(train_answer))
                 print("train_labels: ", len(train_labels))
                 for i in xrange(len(train_query)):
-                    print("lable: ", train_labels[i])
+                    print("label: ", train_labels[i])
                     print("train_answer_sentence: ", train_answer[i])
                     print(" ".join([tf.compat.as_str(rev_vocab[output]) for output in train_answer[i]]))
 
@@ -200,7 +201,7 @@ def al_train():
             print("=============================mc_search: True====================================")
             if current_step % 200 == 0:
                 for i in xrange(len(train_query)):
-                    print("lable: ", train_labels[i])
+                    print("label: ", train_labels[i])
                     print(" ".join([tf.compat.as_str(rev_vocab[output]) for output in train_answer[i]]))
 
             train_query = np.transpose(train_query)
