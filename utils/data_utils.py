@@ -135,7 +135,7 @@ def create_vocabulary(vocabulary_path, data_path_list, max_vocabulary_size,
     print("Creating vocabulary %s from disc_data %s" % (vocabulary_path, data_path_list))
     vocab = {}
     for data_path in data_path_list:
-        with gfile.GFile(data_path, mode="rb") as f:
+        with gfile.GFile(data_path, mode="r") as f:
           counter = 0
           for line in f:
             counter += 1
@@ -153,7 +153,7 @@ def create_vocabulary(vocabulary_path, data_path_list, max_vocabulary_size,
     vocab_list = _START_VOCAB + sorted(vocab, key=vocab.get, reverse=True)
     if len(vocab_list) > max_vocabulary_size:
       vocab_list = vocab_list[:max_vocabulary_size]
-    with gfile.GFile(vocabulary_path, mode="wb") as vocab_file:
+    with gfile.GFile(vocabulary_path, mode="w") as vocab_file:
       for w in vocab_list:
         vocab_file.write(w + "\n")
 
@@ -179,7 +179,7 @@ def initialize_vocabulary(vocabulary_path):
   """
   if gfile.Exists(vocabulary_path):
     rev_vocab = []
-    with gfile.GFile(vocabulary_path, mode="rb") as f:
+    with gfile.GFile(vocabulary_path, mode="r") as f:
       rev_vocab.extend(f.readlines())
     rev_vocab = [line.strip() for line in rev_vocab]
     vocab = dict([(x, y) for (y, x) in enumerate(rev_vocab)])
@@ -237,7 +237,7 @@ def data_to_token_ids(data_path, target_path, vocabulary,
     print("Tokenizing disc_data in %s" % data_path)
     #print("target path: ", target_path)
     #vocab, _ = initialize_vocabulary(vocabulary_path)
-    with gfile.GFile(data_path, mode="rb") as data_file:
+    with gfile.GFile(data_path, mode="r") as data_file:
       with gfile.GFile(target_path, mode="w") as tokens_file:
         counter = 0
         for line in data_file:

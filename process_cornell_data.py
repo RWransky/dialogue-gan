@@ -18,8 +18,10 @@ class CornellData:
         """
         self.lines = {}
         self.dirName = dirName
-        self.queryTextFile = 'gen_data/chitchat.train.query'
-        self.answerTextFile = 'gen_data/chitchat.train.answer'
+        self.queryTrainFile = 'gen_data/chitchat.train.query'
+        self.answerTrainFile = 'gen_data/chitchat.train.answer'
+        self.queryDevFile = 'gen_data/chitchat.dev.query'
+        self.answerDevFile = 'gen_data/chitchat.dev.answer'
 
         self.MOVIE_LINES_FIELDS = ["lineID", "characterID",
                               "movieID", "character", "text"]
@@ -53,25 +55,32 @@ class CornellData:
 
     def spruceUpLine(self,line):
         line = line.replace("'", " ' ")
-        line = line.replace(".", " .")
+        line = line.replace(".", " . ")
         line = line.replace("!", " !")
         line = line.replace("?", " ?")
         line = line.replace('"','')
         line = line.replace(",",'')
-        return line.lower()
+        line = line.replace("-", ' ')
+        return ' '.join(line.lower().split())
 
     def writeToFile(self):
-        with open(os.path.join(self.dirName, self.queryTextFile), 'w+') as queryfile:
-            with open(os.path.join(self.dirName, self.answerTextFile), 'w+') as answerfile:
-                line_numb = len(self.lines.keys())
-                keys = list(self.lines.keys())
-                i = 0
-                while i < line_numb-1:
-                    first_phrase = self.spruceUpLine(self.lines[keys[i+1]]['text'])
-                    second_phrase = self.spruceUpLine(self.lines[keys[i]]['text'])
-                    queryfile.write(str(first_phrase.encode('utf-8')))
-                    answerfile.write(str(second_phrase.encode('utf-8')))
-                    i = i+2
+        with open(os.path.join(self.dirName, self.queryTrainFile), 'w+') as querytrainfile:
+            with open(os.path.join(self.dirName, self.answerTrainFile), 'w+') as answertrainfile:
+                with open(os.path.join(self.dirName, self.queryDevFile), 'w+') as querydevfile:
+                    with open(os.path.join(self.dirName, self.answerDevFile), 'w+') as answerdevfile:
+                        line_numb = len(self.lines.keys())
+                        keys = list(self.lines.keys())
+                        i = 0
+                        while i < line_numb-1:
+                            first_phrase = self.spruceUpLine(self.lines[keys[i+1]]['text'])
+                            second_phrase = self.spruceUpLine(self.lines[keys[i]]['text'])
+                            if i%1000 == 0:
+                                querydevfile.write(str(first_phrase)+'\n')
+                                answerdevfile.write(str(second_phrase)+'\n')
+                            else:
+                                querytrainfile.write(str(first_phrase)+'\n')
+                                answertrainfile.write(str(second_phrase)+'\n')
+                            i = i+2
 
 
 

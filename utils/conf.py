@@ -5,9 +5,9 @@ class disc_config(object):
     batch_size = 256
     lr = 0.2
     lr_decay = 0.9
-    vocab_size = 350
+    vocab_size = 35000
     embed_dim = 512
-    steps_per_checkpoint = 200
+    steps_per_checkpoint = 100
     #hidden_neural_size = 128
     num_layers = 2
     train_dir = './disc_data/'
@@ -37,7 +37,7 @@ class gen_config(object):
     batch_size = 128
     emb_dim = 512
     num_layers = 2
-    vocab_size = 350
+    vocab_size = 35000
     train_dir = "./gen_data/"
     name_model = "st_model"
     tensorboard_dir = "./tensorboard/gen_log/"
@@ -45,7 +45,7 @@ class gen_config(object):
     teacher_loss = "teacher_loss"
     reward_name = "reward"
     max_train_data_size = 0
-    steps_per_checkpoint = 200
+    steps_per_checkpoint = 100
     buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
     buckets_concat = [(5, 10), (10, 15), (20, 25), (40, 50), (100, 50)]
 

@@ -275,16 +275,16 @@ def main(_):
     gen_pre_train()
 
     # model test
-    gen_test()
+    # gen_test()
 
     # step_2 gen training data for disc
-    gen_disc()
+    # gen_disc()
 
     # step_3 training disc model
-    disc_pre_train()
+    # disc_pre_train()
 
     # step_4 training al model
-    al_train()
+    # al_train()
 
     # model test
     # gen_test()
