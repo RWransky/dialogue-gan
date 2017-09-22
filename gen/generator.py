@@ -227,9 +227,9 @@ def decoder(gen_config):
     with tf.Session() as sess:
         model = create_model(sess, gen_config, forward_only=True, name_scope=gen_config.name_model)
 
-        disc_train_query = open("train.query", "w")
-        disc_train_answer = open("train.answer", "w")
-        disc_train_gen = open("train.gen", "w")
+        disc_train_query = open("train.query", "w", encoding='utf-8')
+        disc_train_answer = open("train.answer", "w", encoding='utf-8')
+        disc_train_gen = open("train.gen", "w", encoding='utf-8')
 
         num_step = 0
         while num_step < 10000:
