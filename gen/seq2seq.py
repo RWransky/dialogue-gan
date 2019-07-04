@@ -23,8 +23,8 @@ try:
   from tensorflow.python.ops.rnn_cell_impl import _linear
   linear = _linear
 except:
-  from tensorflow.contrib.rnn.python.ops import core_rnn_cell_impl
-  linear = core_rnn_cell_impl._linear  # pylint: disable=protected-access
+  from tensorflow.contrib.rnn.python.ops import core_rnn_cell
+  linear = core_rnn_cell._linear  # pylint: disable=protected-access
 
 
 def _argmax_or_mcsearch(embedding, output_projection=None, update_embedding=True, mc_search=False):
