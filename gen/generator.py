@@ -105,8 +105,10 @@ def train(gen_config):
 
         # This is the training loop.
         step_time, loss = 0.0, 0.0
+        best_loss = np.inf
         current_step = 0
-        #previous_losses = []
+        steps_without_improvement = 0
+        previous_losses = []
 
         gen_loss_summary = tf.Summary()
         gen_writer = tf.summary.FileWriter(gen_config.tensorboard_dir, sess.graph)
@@ -142,11 +144,16 @@ def train(gen_config):
                        "%.2f" % (model.global_step.eval(), model.learning_rate.eval(),
                                  step_time, perplexity))
                 # Decrease learning rate if no improvement was seen over last 3 times.
-                # if len(previous_losses) > 2 and loss > max(previous_losses[-3:]):
-                #     sess.run(model.learning_rate_decay_op)
-                # previous_losses.append(loss)
+                if len(previous_losses) > 2 and loss > max(previous_losses[-3:]):
+                    sess.run(model.learning_rate_decay_op)
+                previous_losses.append(loss)
                 # Save checkpoint and zero timer and loss.
 
+                if loss < best_loss:
+                    best_loss = loss
+                    steps_without_improvement = 0
+                else:
+                    steps_without_improvement += 1
                 if current_step % (gen_config.steps_per_checkpoint * 3) == 0:
                     print("current_step: %d, save model" %(current_step))
                     gen_ckpt_dir = os.path.abspath(os.path.join(gen_config.train_dir, "checkpoints"))
@@ -159,13 +166,20 @@ def train(gen_config):
                 step_time, loss = 0.0, 0.0
                 # Run evals on development set and print their perplexity.
                 # for bucket_id in xrange(len(gen_config.buckets)):
-                #   encoder_inputs, decoder_inputs, target_weights = model.get_batch(
-                #       dev_set, bucket_id)
-                #   _, eval_loss, _ = model.step(sess, encoder_inputs, decoder_inputs,
-                #                                target_weights, bucket_id, True)
-                #   eval_ppx = math.exp(eval_loss) if eval_loss < 300 else float('inf')
-                #   print("  eval: bucket %d perplexity %.2f" % (bucket_id, eval_ppx))
+                encoder_inputs, decoder_inputs, target_weights = model.get_batch(dev_set, bucket_id)
+                _, eval_loss, _ = model.step(sess,
+                                             encoder_inputs,
+                                             decoder_inputs,
+                                             target_weights,
+                                             bucket_id,
+                                             True)
+                eval_ppx = math.exp(eval_loss) if eval_loss < 300 else float('inf')
+                print("  eval: bucket %d perplexity %.2f" % (bucket_id, eval_ppx))
                 sys.stdout.flush()
+
+            if steps_without_improvement == gen_config.early_stopping_threshold:
+                print('Early stopping after {} steps'.format(current_step))
+
 
 
 def test_decoder(gen_config):

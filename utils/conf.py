@@ -31,10 +31,10 @@ class disc_config(object):
 # configuration options for generator network
 class gen_config(object):
     beam_size = 7
-    learning_rate = 0.5
+    learning_rate = 0.01
     learning_rate_decay_factor = 0.99
     max_gradient_norm = 5.0
-    batch_size = 128
+    batch_size = 32
     emb_dim = 512
     num_layers = 2
     vocab_size = 35000
@@ -46,6 +46,7 @@ class gen_config(object):
     reward_name = "reward"
     max_train_data_size = 0
     steps_per_checkpoint = 100
+    early_stopping_threshold = 10
     buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
     buckets_concat = [(5, 10), (10, 15), (20, 25), (40, 50), (100, 50)]
 
@@ -67,5 +68,3 @@ class GSTConfig(object):
     steps_per_checkpoint = 200
     buckets =        [(5, 10), (10, 15), (20, 25), (40, 50)]
     buckets_concat = [(5, 10), (10, 15), (20, 25), (40, 50), (100, 50)]
-
-

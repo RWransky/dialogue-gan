@@ -223,7 +223,7 @@ def al_train():
             # 5.Teacher-Forcing: Update G on (X, Y )
             t_adjusted_loss, t_step_loss, a = gen_model.step(sess, encoder, decoder, weights, bucket_id, forward_only=False)
             t_loss += t_step_loss / gen_config.steps_per_checkpoint
-           
+
             print("t_step_loss: ", t_step_loss)
             print("t_adjusted_loss", t_adjusted_loss)           # print("normal: ", a)
 
@@ -274,20 +274,20 @@ def main(_):
     # step_1 training gen model
     gen_pre_train()
 
-    # model test
-    # gen_test()
+    model test
+    gen_test()
 
     # step_2 gen training data for disc
-    # gen_disc()
+    gen_disc()
 
     # step_3 training disc model
-    # disc_pre_train()
+    disc_pre_train()
 
     # step_4 training al model
-    # al_train()
+    al_train()
 
     # model test
-    # gen_test()
+    gen_test()
 
 
 if __name__ == "__main__":
