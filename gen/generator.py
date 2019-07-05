@@ -165,20 +165,23 @@ def train(gen_config):
 
                 step_time, loss = 0.0, 0.0
                 # Run evals on development set and print their perplexity.
-                # for bucket_id in xrange(len(gen_config.buckets)):
-                encoder_inputs, decoder_inputs, target_weights = model.get_batch(dev_set, bucket_id)
-                _, eval_loss, _ = model.step(sess,
-                                             encoder_inputs,
-                                             decoder_inputs,
-                                             target_weights,
-                                             bucket_id,
-                                             True)
-                eval_ppx = math.exp(eval_loss) if eval_loss < 300 else float('inf')
-                print("  eval: bucket %d perplexity %.2f" % (bucket_id, eval_ppx))
-                sys.stdout.flush()
+                for bucket_id in xrange(len(gen_config.buckets)):
+                    encoder_inputs, decoder_inputs, target_weights, batch_source_encoder, batch_source_decoder = model.get_batch(
+                                            dev_set, bucket_id, gen_config.batch_size)
+                    # encoder_inputs, decoder_inputs, target_weights = model.get_batch(dev_set, bucket_id)
+                    _, eval_loss, _ = model.step(sess,
+                                                 encoder_inputs,
+                                                 decoder_inputs,
+                                                 target_weights,
+                                                 bucket_id,
+                                                 True)
+                    eval_ppx = math.exp(eval_loss) if eval_loss < 300 else float('inf')
+                    print("  eval: bucket %d perplexity %.2f" % (bucket_id, eval_ppx))
+                    sys.stdout.flush()
 
             if steps_without_improvement == gen_config.early_stopping_threshold:
                 print('Early stopping after {} steps'.format(current_step))
+                break
 
 
 
