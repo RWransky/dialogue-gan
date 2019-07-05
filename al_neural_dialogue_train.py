@@ -274,7 +274,7 @@ def main(_):
     # step_1 training gen model
     gen_pre_train()
 
-    model test
+    # model test
     gen_test()
 
     # step_2 gen training data for disc
