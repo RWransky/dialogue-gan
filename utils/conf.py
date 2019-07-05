@@ -3,7 +3,7 @@ import os
 # configuration options for discriminator network
 class disc_config(object):
     batch_size = 256
-    lr = 0.2
+    lr = 0.001
     lr_decay = 0.9
     vocab_size = 35000
     embed_dim = 512
@@ -25,13 +25,13 @@ class disc_config(object):
     #num_epoch = 60
     #max_decay_epoch = 30
     max_grad_norm = 5
-    buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
+    buckets = [(40, 50)]
 
 
 # configuration options for generator network
 class gen_config(object):
     beam_size = 7
-    learning_rate = 0.01
+    learning_rate = 0.001
     learning_rate_decay_factor = 0.99
     max_gradient_norm = 5.0
     batch_size = 32
@@ -47,8 +47,8 @@ class gen_config(object):
     max_train_data_size = 0
     steps_per_checkpoint = 100
     early_stopping_threshold = 10
-    buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
-    buckets_concat = [(5, 10), (10, 15), (20, 25), (40, 50), (100, 50)]
+    buckets = [(40, 50)]
+    buckets_concat = [(100, 50)]
 
 
 class GSTConfig(object):
@@ -66,5 +66,5 @@ class GSTConfig(object):
     name_loss = "gst_loss"
     max_train_data_size = 0
     steps_per_checkpoint = 200
-    buckets =        [(5, 10), (10, 15), (20, 25), (40, 50)]
-    buckets_concat = [(5, 10), (10, 15), (20, 25), (40, 50), (100, 50)]
+    buckets =        [(40, 50)]
+    buckets_concat = [(100, 50)]
