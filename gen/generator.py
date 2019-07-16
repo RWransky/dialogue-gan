@@ -154,7 +154,7 @@ def train(gen_config):
                     steps_without_improvement = 0
                 else:
                     steps_without_improvement += 1
-                if or current_step % (gen_config.steps_per_checkpoint * 3) == 0:
+                if current_step % (gen_config.steps_per_checkpoint * 3) == 0:
                     print("current_step: %d, save model" %(current_step))
                     gen_ckpt_dir = os.path.abspath(os.path.join(gen_config.train_dir, "checkpoints"))
                     if not os.path.exists(gen_ckpt_dir):
