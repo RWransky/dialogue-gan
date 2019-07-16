@@ -48,7 +48,7 @@ def read_data(config, source_path, target_path, max_size=None):
 
 def create_model(session, gen_config, forward_only, name_scope, initializer=None):
     """Create translation model and initialize or load parameters in session."""
-    with tf.variable_scope(name_or_scope=name_scope, initializer=initializer):
+    with tf.variable_scope(name_or_scope=name_scope, initializer=initializer, reuse=tf.AUTO_REUSE):
         model = seq2seq_model.Seq2SeqModel(gen_config,  name_scope=name_scope, forward_only=forward_only)
         gen_ckpt_dir = os.path.abspath(os.path.join(gen_config.train_dir, "checkpoints"))
         ckpt = tf.train.get_checkpoint_state(gen_ckpt_dir)
@@ -154,7 +154,7 @@ def train(gen_config):
                     steps_without_improvement = 0
                 else:
                     steps_without_improvement += 1
-                if current_step % (gen_config.steps_per_checkpoint * 3) == 0:
+                if or current_step % (gen_config.steps_per_checkpoint * 3) == 0:
                     print("current_step: %d, save model" %(current_step))
                     gen_ckpt_dir = os.path.abspath(os.path.join(gen_config.train_dir, "checkpoints"))
                     if not os.path.exists(gen_ckpt_dir):
@@ -198,7 +198,7 @@ def test_decoder(gen_config):
 
         sys.stdout.write("> ")
         sys.stdout.flush()
-        sentence = sys.stdin.readline()
+        sentence = None # sys.stdin.readline()
         while sentence:
             token_ids = data_utils.sentence_to_token_ids(tf.compat.as_str_any(sentence), vocab)
             print("token_id: ", token_ids)

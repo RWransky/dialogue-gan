@@ -25,9 +25,18 @@ class Seq2SeqModel(object):
         emb_dim = config.emb_dim
 
         self.buckets = config.buckets
-        self.learning_rate = tf.Variable(float(config.learning_rate), trainable=False, dtype=dtype)
+        const_init = tf.compat.v1.constant_initializer
+        self.learning_rate = tf.get_variable('gen_lr',
+                                             [],
+                                             initializer=const_init(float(config.learning_rate)),
+                                             trainable=False,
+                                             dtype=dtype)
         self.learning_rate_decay_op = self.learning_rate.assign(self.learning_rate * config.learning_rate_decay_factor)
-        self.global_step = tf.Variable(0, trainable=False)
+        self.global_step = tf.get_variable('gen_global_step',
+                                           [],
+                                           initializer=const_init(0),
+                                           trainable=False,
+                                           dtype=tf.int32)
         self.batch_size = config.batch_size
         self.num_layers = config.num_layers
         self.max_gradient_norm = config.max_gradient_norm

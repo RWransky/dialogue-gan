@@ -1,5 +1,10 @@
 import os
 import sys
+import json
+from collections import deque
+import random
+
+random.seed(271)
 
 """
 Processing of multi-domain dialogue dataset MetaLWOz
@@ -38,7 +43,7 @@ class MetaLWOzData(object):
         lines = []
         for dialogue in corpus_json:
             turn_q = deque([], maxlen=3)
-            for  in dialogue['turns']:
+            for turn in dialogue['turns']:
                 if turn['authorType'] == 'bot':
                     lines.append({'context': list(turn_q), 'response': turn['text']})
                 turn_q.append(turn['text'])
@@ -55,20 +60,24 @@ class MetaLWOzData(object):
         return ' '.join(line.lower().split())
 
     def writeToFile(self):
+        random.shuffle(self.lines)
+        trainset_size = int(0.9 * len(self.lines))
+        trainset, devset = self.lines[:trainset_size], self.lines[trainset_size:]
+
         with open(os.path.join(self.dirName, self.queryTrainFile), 'w+') as querytrainfile:
             with open(os.path.join(self.dirName, self.answerTrainFile), 'w+') as answertrainfile:
                 with open(os.path.join(self.dirName, self.queryDevFile), 'w+') as querydevfile:
                     with open(os.path.join(self.dirName, self.answerDevFile), 'w+') as answerdevfile:
-                        line_numb = len(self.lines)
-                        for ind, line in enumerate(self.lines):
+                        for ind, line in enumerate(trainset):
                             first_phrase = self.spruceUpLine(' '.join(line['context']))
-                            second_phrase = self.spruceUpLine(' '.join(line['response']))
-                            if ind % 1000 == 0:
-                                querydevfile.write(str(first_phrase)+'\n')
-                                answerdevfile.write(str(second_phrase)+'\n')
-                            else:
-                                querytrainfile.write(str(first_phrase)+'\n')
-                                answertrainfile.write(str(second_phrase)+'\n')
+                            second_phrase = self.spruceUpLine(line['response'])
+                            querytrainfile.write(str(first_phrase)+'\n')
+                            answertrainfile.write(str(second_phrase)+'\n')
+                        for ind, line in enumerate(devset):
+                            first_phrase = self.spruceUpLine(' '.join(line['context']))
+                            second_phrase = self.spruceUpLine(line['response'])
+                            querydevfile.write(str(first_phrase)+'\n')
+                            answerdevfile.write(str(second_phrase)+'\n')
 
 
 def main():

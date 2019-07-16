@@ -25,7 +25,7 @@ class disc_config(object):
     #num_epoch = 60
     #max_decay_epoch = 30
     max_grad_norm = 5
-    buckets = [(40, 50)]
+    buckets = [(120, 100)]
 
 
 # configuration options for generator network
@@ -47,8 +47,8 @@ class gen_config(object):
     max_train_data_size = 0
     steps_per_checkpoint = 100
     early_stopping_threshold = 10
-    buckets = [(40, 50)]
-    buckets_concat = [(100, 50)]
+    buckets = [(120, 100)]
+    buckets_concat = [(120, 100)]
 
 
 class GSTConfig(object):
@@ -66,5 +66,5 @@ class GSTConfig(object):
     name_loss = "gst_loss"
     max_train_data_size = 0
     steps_per_checkpoint = 200
-    buckets =        [(40, 50)]
-    buckets_concat = [(100, 50)]
+    buckets =        [(120, 100)]
+    buckets_concat = [(120, 100)]
